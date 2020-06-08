@@ -1,0 +1,158 @@
+﻿
+@{
+    ViewData["Title"] = "StatusCodeErrors";
+    string metin = string.Empty;
+    switch (ViewBag.statusCode)
+    {
+        case 100:
+            metin = "Devam";
+            break;
+        case 101:
+            metin = "Anahtarlama Protokolü";
+            break;
+        case 102:
+            metin = "İşlem";
+            break;
+        case 200:
+            metin = "Tamam";
+            break;
+        case 201:
+            metin = "Oluşturuldu";
+            break;
+        case 202:
+            metin = "Onaylandı";
+            break;
+        case 203:
+            metin = "Yetersiz Bilgi";
+            break;
+        case 204:
+            metin = "İçerik Yok";
+            break;
+        case 205:
+            metin = "İçeriği Baştan al";
+            break;
+        case 206:
+            metin = "Kısmi İçerik";
+            break;
+        case 207:
+            metin = "Çok-Statü";
+            break;
+        case 210:
+            metin = "Farklı İçerik";
+            break;
+        case 300:
+            metin = "Çok Seçenek";
+            break;
+        case 301:
+            metin = "Kalıcı Taşındı";
+            break;
+        case 302:
+            metin = "Geçici Taşındı";
+            break;
+        case 303:
+            metin = "Diğerlerine Bak";
+            break;
+        case 304:
+            metin = "Güncellenmedi";
+            break;
+        case 305:
+            metin = "Proxy Kullan";
+            break;
+        case 307:
+            metin = "Geçici olarak yeniden gönder";
+            break;
+        case 400:
+            metin = "Kötü İstek";
+            break;
+        case 401:
+            metin = "Yetkisiz";
+            break;
+        case 402:
+            metin = "Ödeme Gerekli";
+            break;
+        case 403:
+            metin = "Yasaklandı";
+            break;
+        case 404:
+            metin = "Sayfa Bulunamadı";
+            break;
+        case 405:
+            metin = "İzin verilmeyen Metod";
+            break;
+        case 406:
+            metin = "Kabul Edilemez";
+            break;
+        case 407:
+            metin = "Proxy Sunucuda login olmak gerekli";
+            break;
+        case 408:
+            metin = "İstek zaman aşamına uğradı";
+            break;
+        case 409:
+            metin = "İstek içinde çelişki var";
+            break;
+        case 410:
+            metin = "Kaynak artık yok";
+            break;
+        case 411:
+            metin = "İstekte içeriğin boyutu belirtilmemiş";
+            break;
+        case 412:
+            metin = "Sunucu istekte belirtilen bazı önkoşulları karşılamıyor";
+            break;
+        case 413:
+            metin = " İsteğin boyutu çok büyük olduğu için işlenemedi";
+            break;
+        case 414:
+            metin = "URI (URL) fazla büyük";
+            break;
+        case 416:
+            metin = "İstenilen kaynak istenilen medya tipini desteklemiyor";
+            break;
+        case 417:
+            metin = "İstek yapılan parça (bir dosyanın bir parçası vb..) sunucu tarafından verilebiliyor veya uygun değil";
+            break;
+        case 422:
+            metin = "Sunucu istenileni desteklemiyor veya yerine getiremiyor";
+            break;
+        case 423:
+            metin = "Kilitli";
+            break;
+        case 424:
+            metin = "Method hatası";
+            break;
+        case 451:
+            metin = "Yasal nedenlerle gösterilemiyor";
+            break;
+        case 500:
+            metin = "Sunucuda bir hata oluştu ve istek karşılanamadı";
+            break;
+        case 501:
+            metin = "Sunucu istenilen isteği yerine getirecek şekilde yapılandırılmamıştır";
+            break;
+        case 502:
+            metin = "Gateway veya Proxy sunucusu, kaynağın bulunduğu sunucudan (upstream sunucusu) cevap alamıyor";
+            break;
+        case 503:
+            metin = "Sunucu şu anda hizmet vermiyor (kapalı veya erişilemiyor)";
+            break;
+        case 504:
+            metin = "Gateway veya Proxy sunucusu, kaynağın bulunduğu sunucudan (upstream sunucusu) belirli bir zaman içinde cevap alamadı";
+            break;
+        case 505:
+            metin = "HTTP Protokol versiyonu desteklenmiyor";
+            break;
+        case 507:
+            metin = "Insufficient storage";
+            break;
+
+        default: metin = "Bilinmeyen hata";
+            break;
+
+    }
+}
+
+<h4>Statü : @metin</h4>
+
+
+

@@ -1,0 +1,244 @@
+﻿@using ofsen.ViewModels;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Oğuz ŞEN</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/jqueryui/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/SiteAdmin.css" rel="stylesheet" />
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/lib/ckEditor/ckeditor.js"></script>
+    <script src="~/lib/jquery.autosize.min.js"></script>
+    <script src="~/js/site.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</head>
+<body>
+    @{
+        List<PanolarIndexMenu> MenuList = new List<PanolarIndexMenu>();
+        MenuList = new List<PanolarIndexMenu>()
+{
+    new PanolarIndexMenu()
+    {
+        kategori = "Ayarlar",
+        awesome = "fas fa-hammer",
+        alt = new List<PanolarIndexAltMenu>()
+    {
+            new PanolarIndexAltMenu()
+            {
+                isim = "SysRoles",
+                url = "",
+            },
+            new PanolarIndexAltMenu()
+            {
+                isim = "Ayar2",
+                url = ""
+            }
+        }
+    },
+
+    new PanolarIndexMenu()
+    {
+        kategori = "Kullanıcılar",
+        awesome = "fas fa-user",
+        alt = new List<PanolarIndexAltMenu>()
+    {
+            new PanolarIndexAltMenu()
+            {
+                isim = "Listele",
+                url = "",
+
+            },
+            new PanolarIndexAltMenu
+            {
+                isim = "Yeni Kullanıcı",
+                url = ""
+            }
+        }
+    },
+
+    new PanolarIndexMenu()
+    {
+        kategori = "Sayfalar",
+        awesome = "fas fa-scroll",
+        alt = new List<PanolarIndexAltMenu>()
+    {
+            new PanolarIndexAltMenu()
+            {
+                isim = "Panolar",
+                url = "/Admin/Panolar/Index"
+            }
+        }
+    },
+
+    new PanolarIndexMenu()
+    {
+        kategori = "Loglar",
+        awesome = "fas fa-clipboard-list",
+        alt = new List<PanolarIndexAltMenu>()
+    {
+            new PanolarIndexAltMenu()
+            {
+                isim = "Logları gör",
+                url = ""
+            }
+        }
+    }
+};
+    }
+
+    <!-- #region Gerekli Modüller -->
+    <div class="modal fade" id="xModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modal-baslik bg-dark">
+                    <div class="row-cols-1"></div>
+                    <div class="row-cols-1 float-right">
+                        <button type="button" class="closeBtn" data-dismiss="modal" aria-label="Close">
+                            X
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-body" id="xIcerik">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="display:none">
+        <div class="bekleyiniz">
+            <div class='dot-spin'></div>
+            <br />
+            Lütfen bekleyiniz
+        </div>
+        <div class="hataOldu">
+            <span class="fas fa-exclamation-circle"> Bir hata oldu</span>
+        </div>
+        <div id="ozConfirm" style="min-height:40em">
+            <div id="ozQuestion"></div>
+            <br />
+            <button class="btn " id="ozYesBtn">Yes</button>
+            <button class="btn " id="ozNoBtn">No</button>
+        </div>
+    </div>
+    <!-- #endregion -->
+
+
+    <div class="logo logoust">
+        <span>LOGO</span>
+    </div>
+
+    <div class="ustTabaka">
+
+        <div class="logo">
+            <span>LOGO</span>
+        </div>
+        <div class="ustMenu">
+            <div class="ustMenuItem float-left menuBar" onclick="menuPopupGoster()">
+                <span class="fas fa-bars"></span>
+            </div>
+            <div class="ustMenuItem float-right">
+                <span class="fas fa-user"></span>
+            </div>
+        </div>
+    </div>
+
+    <div id="pushDownDiv" style="height:8em"></div>
+
+    <div class="altTabaka">
+        <div class="yanMenu" id="yanMenu">
+            <div class="accordion" id="akordiyon">
+
+                @foreach (var menu in MenuList)
+                {
+                    <div class="card akordiyonKart">
+                        <div class="card-header" id="heading_@menu.kategori">
+                            <div class="menuItem collapsed" data-toggle="collapse" data-target="#collapse_@menu.kategori">
+                                <span class="@menu.awesome"></span>&nbsp;&nbsp;&nbsp; @menu.kategori
+                            </div>
+                        </div>
+                        <div id="collapse_@menu.kategori" class="collapse" aria-labelledby="heading_@menu.kategori" data-parent="#akordiyon">
+                            <div class="card-body" style="padding:0">
+
+                                @foreach (var alt in menu.alt)
+                                {
+                                    <div class="altMenuItem" onclick="MenuPress('@alt.url')"> @alt.isim </div>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="icerik">
+            @RenderBody()
+        </div>
+    </div>
+
+    <script>
+
+        function MenuPress(gotourl) {
+            window.location = gotourl;
+        }
+
+        $(document).ready(function () { ResizeEvent(); })
+
+        $(window).resize(function () { ResizeEvent(); });
+
+        function ResizeEvent() {
+            var pengen = window.innerWidth;
+            if (pengen > 600)
+                ResizeBuyuk(pengen);
+            else
+                ResizeKucuk(pengen);
+            ResizeHerzaman();
+        }
+
+        function ResizeHerzaman() {
+            $(".ustTabaka").css("max-width", window.innerWidth + "px");
+            $(".logoust").css("max-width", window.innerWidth + "px");
+        }
+
+        function ResizeBuyuk() {
+            $("#yanMenu").slideDown();
+            $(".logo").removeClass("collapse");
+            $(".logoust").addClass("collapse");
+            $(".menuBar").addClass("collapse");
+            $(".ustTabaka").removeClass("fixed-top");
+            $("#pushDownDiv").addClass("collapse");
+            $(".ustTabaka").css("top", "0");
+
+            $("#yanMenu").css("position", "unset");
+            $("#yanMenu").css("top", "0");
+            $("#yanMenu").css("z-index", "auto");
+        }
+
+        function ResizeKucuk() {
+            $("#yanMenu").hide();
+            $(".logo").addClass("collapse");
+            $(".logoust").removeClass("collapse");
+            $(".menuBar").removeClass("collapse");
+            $(".ustTabaka").addClass("fixed-top");
+            $("#pushDownDiv").removeClass("collapse");
+            $(".ustTabaka").css("top", "4em");
+
+            $("#yanMenu").css("position", "absolute");
+            $("#yanMenu").css("top", "8em");
+            $("#yanMenu").css("z-index", "10");
+        }
+
+        function menuPopupGoster() {
+            if ($("#yanMenu").is(":hidden"))
+                $("#yanMenu").slideDown();
+            else
+                $("#yanMenu").slideUp();
+        }
+    </script>
+</body>
+</html>

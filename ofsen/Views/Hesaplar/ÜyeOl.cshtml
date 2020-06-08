@@ -1,0 +1,80 @@
+﻿@model ofsen.ViewModels.HesaplarÜyeOlModel
+
+@{
+    ViewData["Title"] = "ÜyeOl";
+}
+
+<h5>Yeni Üye Kaydı Oluşturun</h5>
+<hr />
+<div class="row">
+    <div class="col-md-6 offset-md-3" style="border:solid rgb(111,111,111) 2px; border-radius:5px; padding:2em ">
+        <form id="ÜyeOl" asp-action="ÜyeOl" autocomplete="off">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="username" class="control-label"></label>
+                <input asp-for="username" class="form-control" />
+                <span asp-validation-for="username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="email" class="control-label"></label>
+                <input asp-for="email" class="form-control" />
+                <span asp-validation-for="email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="password" class="control-label"></label>
+                <input asp-for="password" class="form-control" />
+                <span asp-validation-for="password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="confirmpassword" class="control-label"></label>
+                <input asp-for="confirmpassword" class="form-control" />
+                <span asp-validation-for="confirmpassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Üye Ol" class="btn btn-outline-dark form-control" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            $(document).on('focus', ':input', function () {
+                $(this).attr('autocomplete', 'off');
+            });
+        });
+
+        $("#ÜyeOl").validate({
+            rules: {
+                username: { required: true, minlength: 4, maxlength: 12 },
+                email: { required: true, email: true },
+                password: { required: true, minlength: 4, maxlength: 12 },
+                confirmpassword: { equalTo: "#password" },
+            },
+            errorElement: "em",
+            errorPlacement: function (error, element) {
+                // Add the `help-block` class to the error element
+                error.addClass("input-Validation-Block");
+
+                if (element.prop("type") === "checkbox") {
+                    error.insertAfter(element.parent("label"));
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass("alert-danger").removeClass("alert-success");
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).addClass("alert-success").removeClass("alert-danger");
+            }
+
+        });
+    </script>
+
+}
+
+

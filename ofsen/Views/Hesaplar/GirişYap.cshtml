@@ -1,0 +1,43 @@
+﻿@model ofsen.ViewModels.HesaplarGirişYapModel
+
+@{
+    ViewData["Title"] = "GirişYap";
+}
+<h5>Hesabınızda oturum açın</h5>
+<hr />
+    <div class="row">
+        <div class="col-md-4 offset-md-4" style="border:solid rgb(111,111,111) 2px; border-radius:5px; padding:1em ">
+            <form asp-action="GirişYap" autocomplete="off">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="username" class="control-label"></label>
+                    <input asp-for="username" class="form-control" />
+                    <span asp-validation-for="username" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="password" class="control-label"></label>
+                    <input asp-for="password" class="form-control" />
+                    <span asp-validation-for="password" class="text-danger"></span>
+                </div>
+
+                <div class="form-check-inline">
+                    <label class="form-check-label">
+                        @Html.DisplayNameFor(model => model.hatırla) <input class="form-check-input" asp-for="hatırla" />
+                    </label>
+                </div>
+                <br /><br />
+
+                <div class="form-group">
+                    <input type="submit" value="Giriş" class="btn form-control btn-outline-dark" />
+                    <a class="text-dark" asp-action="ŞifremiUnuttum" asp-controller="Hesaplar"><i>Şifremi unuttum</i></a>
+                </div>
+            </form>
+        </div>
+    </div>
+<br />
+<div class="row">
+    <div class="col-md-4 offset-md-4" style="border:solid rgb(111,111,111) 2px; border-radius:5px; padding:1em ">
+        Hala üye değil misiniz? <br /><br />
+        <a asp-action="ÜyeOl" asp-controller="Hesaplar" class="btn form-control btn-outline-dark">Şimdi Üye Olun</a>
+    </div>
+</div>

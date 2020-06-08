@@ -1,0 +1,65 @@
+﻿@model IEnumerable<ofsen.Models.Pano>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.anatab)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.thumbName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.metin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.yayinTarihi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.aktif)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.anatab)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.thumbName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.metin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.yayinTarihi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.aktif)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

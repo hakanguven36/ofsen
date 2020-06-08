@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/site.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+</head>
+<body>
+    <div id="background"></div>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <span class="navbar-toggler fas fa-bars" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"></span>
+        <div style="position:absolute;left:0; z-index:-5; width:100% ; height:100%; background-color:rgb(52,58,64);opacity:0.5; margin:0;padding:0">&nbsp;</div>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+
+            <ul class="navbar-nav row" style="width:100%">
+                <li class="nav-item col">
+                    <a class="nav-link" asp-action="Index" asp-controller="Home"><span class="fas fa-user"></span> Oğuz ŞEN</a>
+                </li>
+                <li class="nav-item col">
+                    <a class="nav-link"  asp-action="Projeler" asp-controller="Home" ><span class="fas fa-project-diagram"></span> Projeler</a>
+                </li>
+                <li class="nav-item col">
+                    <a class="nav-link" asp-action="Blog" asp-controller="Home"><span class="fab fa-blogger-b"></span> Blog</a>
+                </li>
+                <li class="nav-item col">
+                    <a class="nav-link" asp-action="İletişim" asp-controller="Home"><span class="fas fa-file-signature"></span> İletişim</a>
+                </li>
+                @if (signInManager.IsSignedIn(User))
+                {
+                    <li class="nav-item col" >
+                        <a class="nav-link" asp-action="ÇıkışYap" asp-controller="Hesaplar"><span class="fas fa-sign-in-alt"></span> Çıkış @signInManager.UserManager.GetUserName(User)</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item col">
+                        <a class="nav-link" asp-action="Index" asp-controller="Hesaplar"><span class="fas fa-sign-in-alt"></span> Giriş/Üyelik</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </nav>
+
+    <div class="modal fade" data-backdrop="static" id="xModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modal-baslik bg-dark">
+                    <div class="row-cols-1"></div>
+                    <div class="row-cols-1 float-right">
+                        <button type="button" class="closeBtn" data-dismiss="modal" aria-label="Close">
+                            X
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-body" id="xIcerik">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display:none">
+        <div class="bekleyiniz">
+            <center>
+                <div class='dot-spin'></div>
+                <br />
+                Lütfen bekleyiniz
+            </center>
+        </div>
+        <div class="beklemeyiniz">
+            <center>
+                <span class="fas fa-exclamation-circle"></span>
+                <br />
+                Bir hata oldu
+            </center>
+        </div>
+    </div>
+
+    <script>
+        function aktifYap(navitem) {
+            $(".nav-item").removeClass("active");
+            $("#" + navitem).addClass("active");
+        }
+    </script>
+
+    <div class="body-content container">
+        <p>&nbsp;</p>
+        @RenderBody()
+    </div>
+
+    <footer class="footClass bg-dark" style="vertical-align:middle">
+        <div style="padding-left:10px;vertical-align:middle">
+            <p>&copy; @DateTime.Now.Year - Oğuz ŞEN resmi internet sitesi</p>
+        </div>
+    </footer>
+
+    @RenderSection("Scripts", false);
+</body>
+</html>

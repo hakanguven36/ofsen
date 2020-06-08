@@ -1,0 +1,137 @@
+﻿html, body {
+    height: 100%;
+}
+
+body {
+ 
+    font-family: Bahnschrift; 
+    display: flex;
+    flex-direction: column;
+}
+
+#background {
+    background-image: url(../images/backblack.png);
+    background-size: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: fixed;
+    z-index: -999;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    align-content: center;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    border-radius: 3px;
+    background-color: rgb(180,180,180);
+    flex: 1 0 auto;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea,
+button,
+label {
+    max-width: 480px !important;
+    vertical-align: middle
+}
+
+button,label{
+    outline:none !important ;
+}
+
+input[type=checkbox] {
+    transform: scale(2);
+    width: 2em !important;
+}
+
+p {
+    text-indent: 2em;
+    text-align: justify;
+}
+
+.modal {
+    
+}
+
+.modal-body {
+    overflow-x: hidden;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.modal-dialog {
+    position: relative;
+    display: table; /* table; /* <-- This makes the trick */
+    overflow-y: hidden;
+    overflow-x: hidden;
+    width: auto;
+}
+
+.footClass {
+    flex-shrink: 0;
+    background-color:rgb(52,58,64);
+    opacity:0.5;
+}
+
+.closeBtn {
+    height: 3em;
+    width: 3em;
+    outline: none;
+    border-top-right-radius: 5px;
+    background-color: rgb(124,136,158);
+    color: white
+}
+    .closeBtn:hover {
+        background-color: rgb(104,116,128);
+    }
+
+.modal-baslik {
+    margin: 0;
+    padding: 0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.nav-link{
+    font-size:1.6em;
+    font-weight:bold
+}
+.nav-item {
+    text-align: center;
+}
+
+.card{
+    margin:7px;
+    min-height:4em;
+}
+
+.card-link{
+    color:darkblue !important;
+}
+
+.bg-dark{
+    color:white;
+}
+
+.btn-link{
+    text-decoration:none !important;
+}
+
+.gevsekform *{
+    margin-bottom:.5em !important;
+}
+
+.blueTitle {
+    font-weight: 400;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.input-Validation-Block{
+    color:red;
+}
