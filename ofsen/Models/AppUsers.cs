@@ -9,8 +9,7 @@ using ofsen.Araclar;
 
 namespace ofsen.Models
 {
-	[Table("Kullar")]
-	public partial class Users : IdentityUser
+	public partial class AppUsers : IdentityUser<int>
 	{
 		[Required(ErrorMessage ="Bu alan gerekli!")]
 		[StringLength(12,MinimumLength = 6,ErrorMessage = "Bu alan 6-12 karakter uzunluğunda olmalı")]

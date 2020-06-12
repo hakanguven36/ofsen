@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ofsen.ViewModels
 {
+	
 	public class HesaplarGirişYapModel
 	{
 		[Required(ErrorMessage = "Bu alan gerekli")]

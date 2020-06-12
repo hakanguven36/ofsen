@@ -1,0 +1,42 @@
+﻿
+@{
+    Layout = null;
+    var confirmationLink = (string)ViewBag.confirmationLink;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>E-posta Doğrulama</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+
+    <div style="color:darkblue; font-family:'Comic Sans MS'">
+        <h4>Merhaba</h4><br />
+        <h5>Bu e-posta adresi ile <a href="http://www.oguzsen.net" target="_blank">http://www.oguzsen.net</a> sitesine üyelik yaptınız.</h5>
+        <h5>Üye olduğunuz için teşekkürler.</h5>
+        <h5>Üyelik işlemlerinizin tamamlanması için lütfen aşağıdaki doğrula düğmesine tıklayarak e-posta adresinizi doğrulayın.</h5>
+        <br />
+        <button class="btn btn-success" onclick="dogrula()"> Doğrula </button>
+        <br />
+        <h5>Veya aşağıdaki kodu internet tarayıcınızın adres bölümüne yapıştırıp enter'layınız.</h5>
+        <br />
+        <h5>@confirmationLink</h5>
+        <br />
+        <h5>İyigünler</h5>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script>
+        function dogrula() {
+            window.open('@confirmationLink');
+        }
+    </script>
+</body>
+</html>

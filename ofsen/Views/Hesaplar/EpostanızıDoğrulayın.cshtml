@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewData["Title"] = "EpostanızıDoğrulayın";
+
+    string epostaniz = (string)ViewBag.epostaniz;
+    string epostaSaglayici = (string)ViewBag.epostaSaglayici;
+}
+<div id="buSayfaDiv">
+    <p>Sitemize üye olurken belirttiğiniz e-posta adresinizi (@epostaniz) onaylamanız gerekiyor.</p>
+    <p><a href="@epostaSaglayici" target="_blank"><i>@epostaSaglayici</i></a></p>
+    <p>Lütfen gereksiz e-postalar (spam) bölümünü de kontrol ediniz.</p>
+    <p>Eğer üyelik işleminizi henüz yaptıysanız doğrulama e-postasının ulaşması biraz zaman alabilir.</p>
+    <p>Doğrulama e-postası beklemenize rağmen ulaşmadıysa aşağıdaki düğmeye tıklayarak yeniden göndermeyi deneyebilirsiniz</p>
+    <button onclick="TekrakGonder('@epostaniz')">Tekrar gönder</button>
+</div>
+
+
+<script>
+    function TekrakGonder(epostaniz){ 
+        new OzAjax("/Hesaplar/TekrakGonder", POST, { thatusername: epostaniz }, tekrarGonderBasari).BasitGonder();
+        function tekrarGonderBasari(data) {
+            new OzModal().Bilgi(data, 3000);
+        }
+    }
+
+
+</script>

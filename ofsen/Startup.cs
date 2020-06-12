@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NETCore.MailKit.Extensions;
+using NETCore.MailKit.Infrastructure.Internal;
 using ofsen.Models;
 
 
@@ -25,11 +27,7 @@ namespace ofsen
 
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddDbContext<OfsenContext>(option => option.UseSqlServer(Configuration.GetConnectionString("MyConn")));
-			services.AddMvc(option => option.EnableEndpointRouting = false).AddRazorRuntimeCompilation();
-			services.AddSession(option => option.IdleTimeout = TimeSpan.FromMinutes(30));
-			services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();  // getip of cli
-			services.AddIdentity<IdentityUser, IdentityRole>(option =>
+			services.AddIdentity<AppUsers, AppRole>(option =>
 			{
 				option.User.RequireUniqueEmail = true;
 				option.User.AllowedUserNameCharacters = "ABCÇDEFGÐHIÝJKLMNOÖPRSÞTUÜVYZWXQabcçdefgðhýijklmnoöprsþtuüvyzwxq1234567890_.-@";
@@ -41,6 +39,11 @@ namespace ofsen
 				option.Password.RequiredUniqueChars = 2;
 				option.Password.RequireNonAlphanumeric = false;
 			}).AddEntityFrameworkStores<OfsenContext>();
+			services.AddDbContext<OfsenContext>(option => option.UseSqlServer(Configuration.GetConnectionString("MyConn")));
+			services.AddMvc(option => option.EnableEndpointRouting = false).AddRazorRuntimeCompilation();
+			services.AddSession(option => option.IdleTimeout = TimeSpan.FromMinutes(30));
+			services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();  // getip of cli
+			services.AddMailKit(config => config.UseMailKit(Configuration.GetSection("Eposta").Get<MailKitOptions>()));
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

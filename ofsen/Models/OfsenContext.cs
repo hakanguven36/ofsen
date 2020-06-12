@@ -9,19 +9,14 @@ using ofsen.ViewModels;
 
 namespace ofsen.Models
 {
-	public class OfsenContext : IdentityDbContext<Users>
+	public class OfsenContext : IdentityDbContext<AppUsers, AppRole, int>
 	{
 		public OfsenContext(DbContextOptions<OfsenContext> options):base(options)
 		{
 		}
 
-		public DbSet<Users> Kullar { get; set; }
 		public DbSet<Pano> Pano { get; set; }
 		public DbSet<Sayfa> Sayfa { get; set; }
 		public DbSet<Comment> Comment { get; set; }
-		public DbSet<ofsen.ViewModels.HesaplarÜyeOlModel> HesaplarÜyeOlModel { get; set; }
-		public DbSet<ofsen.ViewModels.HesaplarGirişYapModel> HesaplarGirişYapModel { get; set; }
-
-
 	}
 }
