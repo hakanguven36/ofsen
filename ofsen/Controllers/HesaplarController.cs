@@ -10,7 +10,6 @@ using ofsen.Araclar;
 using ofsen.Models;
 using ofsen.ViewModels;
 
-
 namespace ofsen.Controllers
 {
     public class HesaplarController : Controller
@@ -31,50 +30,76 @@ namespace ofsen.Controllers
             return RedirectToAction("GirişYap","Hesaplar");
         }
 
+		#region Üyelik ve Eposta doğrulama
 		[HttpGet]
-		public IActionResult ÜyeOl()
-		{
-			return View();
-		}
-
+		public IActionResult ÜyeOl() => View();
 		[HttpPost]
 		public async Task<IActionResult> ÜyeOl(HesaplarÜyeOlModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				AppUsers user = await userManager.FindByNameAsync(model.email);
-				if(user == null)
+				var user = new AppUsers()
 				{
-					user = new AppUsers();
-					user.UserName = model.email;
-					user.Email = model.email;
-					user.kullanıcıAdı = model.username;
-					user.uyelikTarihi = DateTime.Now;
+					UserName = model.email,
+					Email = model.email,
+					kullanıcıAdı = model.username,
+					uyelikTarihi = DateTime.Now
+				};
 
-					var result = await userManager.CreateAsync(user, model.password);
+				var result = await userManager.CreateAsync(user, model.password);
 
-					if (result.Succeeded)
-					{
-						var theToken = await userManager.GenerateEmailConfirmationTokenAsync(user);
-						var link = Url.Action(nameof(EpostaDogrula), "Hesaplar", new { userID = user.Id, code = theToken });
-
-						await emailService.SendAsync(user.Email, "E-posta adresini doğrulayın", "", true);
-
-						return RedirectToAction("EpostanızıDoğrulayın", "Hesaplar", new { thatusername = model.email });
-					}
-					foreach (var error in result.Errors)
-					{
-						ModelState.AddModelError("", error.Description);
-					}
+				if (result.Succeeded)
+				{
+					return RedirectToAction("EpostaAdresiniDoğrulayın", "Hesaplar", new {user});
 				}
+				foreach (var error in result.Errors)
+				{
+					ModelState.AddModelError("", error.Description);
+				}
+				
 			}
 			return View(model);
 		}
+
 		[HttpGet]
-		public IActionResult GirişYap()
+		public IActionResult EpostaAdresiniDoğrulayın() => View();
+		[HttpPost]
+		public IActionResult EpostaAdresiniDoğrulayın(AppUsers user)
 		{
+			Task.Run(() => SendConfirmationEmail(user));
 			return View();
 		}
+
+		public async Task< bool> SendConfirmationEmail(AppUsers user)
+		{
+			try
+			{
+				// token yarat
+				// sayfayı string olarak hazırla
+
+				var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+				var link = Url.Action(nameof(EpostaDogrula), "Hesaplar", new { userID = user.Id, code = token });
+				FreeTokenModel tokenModel = new FreeTokenModel() { confirmationLink = link };
+				string sayfa = this.RenderViewAsync("EmailConfirmationPage", tokenModel).Result;
+				await emailService.SendAsync(user.Email, "E-posta adresini doğrulayın", sayfa, true);
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
+		public IActionResult EmailConfirmationPage(FreeTokenModel model)
+		{
+			return View(model);
+		}
+
+		#endregion
+
+		#region Giriş ve şifremi unuttum.. Ayrıca doğrumayı yeniden gönder
+		[HttpGet]
+		public IActionResult GirişYap() => View();
 		[HttpPost]
 		public async Task<IActionResult> GirişYap(HesaplarGirişYapModel model)
 		{
@@ -112,18 +137,14 @@ namespace ofsen.Controllers
 			}
 			return View(model);
 		}
+		#endregion
+
 
 		public IActionResult EpostanızıDoğrulayın(string thatusername)
 		{
 			ViewBag.epostaniz = thatusername;
 			ViewBag.epostaSaglayici = "http://www." + thatusername.Substring(thatusername.IndexOf('@') + 1);
 			return View();
-		}
-
-		public IActionResult EpostaDoğrulamaGerekli(string thatusername)
-		{
-			ViewBag.epostaSaglayici = "http://www." + thatusername.Substring(thatusername.IndexOf('@') + 1);
-			return PartialView();
 		}
 
 		public	IActionResult EpostaDogrula(string userID, string code)
@@ -134,41 +155,5 @@ namespace ofsen.Controllers
 
 		}
 
-		[HttpPost]
-		public IActionResult TekrarGonder(string thatusername)
-		{
-	
-			// TODO: düzenlenecek..
-
-			return Json("Doğrulama e-postası yeniden gönderildi. Lütfen e-posta hesabınızı kontrol ediniz.");
-		}
-
-		public IActionResult ŞifremiUnuttum()
-		{
-			return View();
-		}
-
-		public async Task<IActionResult> ÇıkışYap()
-		{
-			await signInManager.SignOutAsync();
-			return RedirectToAction("Index", "Home");
-		}
-
-		public async Task<IActionResult> Deneme()
-		{
-			var model = new FreeTokenModel() { userID="1", code="falanfilantokenKodu2343234234" };
-			ViewBag.deneme = await this.RenderViewAsync("EmailConfirmationPage", model);
-			return View();
-		}
-
-		public IActionResult EmailConfirmationPage(FreeTokenModel model)
-		{
-
-			var link = Url.Action(nameof(EpostaDogrula), "Hesaplar", new { userID = model.userID, code = model.code });
-			if (string.IsNullOrWhiteSpace(model.confirmationLink))
-				return null;
-			ViewBag.confirmationString = model.confirmationLink;
-			return View();
-		}
     }
 }
