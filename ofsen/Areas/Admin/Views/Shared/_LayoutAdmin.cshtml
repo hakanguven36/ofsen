@@ -26,39 +26,19 @@
 {
     new PanolarIndexMenu()
     {
-        kategori = "Ayarlar",
-        awesome = "fas fa-hammer",
-        alt = new List<PanolarIndexAltMenu>()
-    {
-            new PanolarIndexAltMenu()
-            {
-                isim = "SysRoles",
-                url = "",
-            },
-            new PanolarIndexAltMenu()
-            {
-                isim = "Ayar2",
-                url = ""
-            }
-        }
-    },
-
-    new PanolarIndexMenu()
-    {
-        kategori = "Kullanıcılar",
+        kategori = "Hesaplar",
         awesome = "fas fa-user",
         alt = new List<PanolarIndexAltMenu>()
-    {
+{
             new PanolarIndexAltMenu()
             {
-                isim = "Listele",
-                url = "",
-
+                isim = "Kullanıcılar",
+                url = "/Admin/Kullar/Index",
             },
-            new PanolarIndexAltMenu
+            new PanolarIndexAltMenu()
             {
-                isim = "Yeni Kullanıcı",
-                url = ""
+                isim = "Roller",
+                url = "/Admin/Roller/Index"
             }
         }
     },
@@ -68,11 +48,51 @@
         kategori = "Sayfalar",
         awesome = "fas fa-scroll",
         alt = new List<PanolarIndexAltMenu>()
-    {
+{
             new PanolarIndexAltMenu()
             {
                 isim = "Panolar",
                 url = "/Admin/Panolar/Index"
+            },
+            new PanolarIndexAltMenu()
+            {
+                isim = "Sayfalar",
+                url = "/Admin/Panolar/Sayfalar"
+            }
+        }
+    },
+
+    new PanolarIndexMenu()
+    {
+        kategori = "Yorumlar",
+        awesome = "fas fa-comment-dots",
+        alt = new List<PanolarIndexAltMenu>()
+{
+            new PanolarIndexAltMenu()
+            {
+                isim = "Yorumlar",
+                url = "/Admin/"
+            }
+        }
+    },
+
+
+    new PanolarIndexMenu()
+    {
+        kategori = "Ayarlar",
+        awesome = "fas fa-hammer",
+        alt = new List<PanolarIndexAltMenu>()
+{
+            new PanolarIndexAltMenu()
+            {
+                isim = "Site",
+                url = "",
+
+            },
+            new PanolarIndexAltMenu
+            {
+                isim = "Hesap kuralları",
+                url = ""
             }
         }
     },
@@ -82,10 +102,20 @@
         kategori = "Loglar",
         awesome = "fas fa-clipboard-list",
         alt = new List<PanolarIndexAltMenu>()
-    {
+{
             new PanolarIndexAltMenu()
             {
-                isim = "Logları gör",
+                isim = "Tüm loglar",
+                url = ""
+            },
+            new PanolarIndexAltMenu()
+            {
+                isim = "Hatalar",
+                url = ""
+            },
+            new PanolarIndexAltMenu()
+            {
+                isim = "Güvenlik",
                 url = ""
             }
         }
@@ -94,18 +124,19 @@
     }
 
     <!-- #region Gerekli Modüller -->
-    <div class="modal fade" id="xModal">
+    @*<div class="modal fade" data-backdrop="static" id="ozModal">*@
+    <div class="modal fade" id="ozModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header modal-baslik bg-dark">
-                    <div class="row-cols-1"></div>
+                    <div id="ozModalBaslik" class="row-cols-1; m-auto"></div>
                     <div class="row-cols-1 float-right">
                         <button type="button" class="closeBtn" data-dismiss="modal" aria-label="Close">
                             X
                         </button>
                     </div>
                 </div>
-                <div class="modal-body" id="xIcerik">
+                <div class="modal-body" id="ozIcerik">
                 </div>
             </div>
         </div>
@@ -162,7 +193,7 @@
                                 <span class="@menu.awesome"></span>&nbsp;&nbsp;&nbsp; @menu.kategori
                             </div>
                         </div>
-                        <div id="collapse_@menu.kategori" class="collapse" aria-labelledby="heading_@menu.kategori" data-parent="#akordiyon">
+                        <div id="collapse_@menu.kategori" class="collapse menuCollapsedPart" aria-labelledby="heading_@menu.kategori" data-parent="#akordiyon">
                             <div class="card-body" style="padding:0">
 
                                 @foreach (var alt in menu.alt)

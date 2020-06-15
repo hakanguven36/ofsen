@@ -82,7 +82,8 @@ OzModal.prototype.Bilgi = function (bilgi, sure, baslik) {
     setTimeout(this.Kapat, sure || 1200);
     this.bilgiUsed++;
 };
-OzModal.prototype.Sayfa = function (icerik) {
+OzModal.prototype.Sayfa = function (icerik, baslik) {
+    this.ozBaslik.html(baslik);
     this.ozicerik.html(icerik);
     this.ozmodal.modal("show");
 };

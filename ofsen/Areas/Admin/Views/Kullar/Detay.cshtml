@@ -1,0 +1,48 @@
+﻿@model ofsen.Models.AppUsers
+
+<div>
+    <dl class="row">
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.kullanıcıAdı)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.kullanıcıAdı)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.EmailConfirmed)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.EmailConfirmed)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.LockoutEnd)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.LockoutEnd)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.AccessFailedCount)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.AccessFailedCount)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.uyelikTarihi)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.uyelikTarihi)
+        </dd>
+        <dt class = "col-sm-4">
+            @Html.DisplayNameFor(model => model.silindi)
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.silindi)
+        </dd>
+    </dl>
+</div>

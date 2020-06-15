@@ -27,6 +27,27 @@ namespace ofsen.Areas.Admin.Controllers
             return View(db.Users.ToList());
         }
 
+		public IActionResult Detay(int id)
+		{
+			return PartialView(db.Users.Find(id));
+		}
+
+		public async Task<IActionResult> Düzenle(int id)
+		{
+			var user = await userManager.FindByIdAsync(id.ToString());
+			if(user != null)
+			{
+				ViewBag.userRoles = userManager.GetRolesAsync(user).Result;
+			}
+
+			return View(user);
+		}
+
+		public IActionResult SiteRolleriniGetir()
+		{
+			return Json(roleManager.Roles.Select(u => u.Name));
+		}
+
 		[HttpPost]
 		public async Task< IActionResult> UserRolEkle(int id, string[] roles)
 		{

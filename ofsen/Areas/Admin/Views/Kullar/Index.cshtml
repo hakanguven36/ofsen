@@ -38,35 +38,54 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.kullanıcıAdı)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmailConfirmed)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LockoutEnd)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccessFailedCount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.uyelikTarihi)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.silindi)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.kullanıcıAdı)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmailConfirmed)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LockoutEnd)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccessFailedCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.uyelikTarihi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.silindi)
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-light" onclick="userDetay(@item.Id)">
+                        <span class="fas fa-glasses"></span>
+                    </button>
+                    <button class="btn btn-sm btn-primary" onclick="userEdit(@item.Id)">
+                        <span class="fas fa-user-edit"></span>
+                    </button>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<script>
+    function userDetay(id) {
+        
+        new OzAjax("/Admin/Kullar/Detay", GET, { id: id }, detayBasari).BasitGonder();
+        function detayBasari(data) {
+            new OzModal().Sayfa(data);
+        }
+    }
+
+    function userEdit(id) {
+        window.location = "/Admin/Kullar/Düzenle/id";
+
+    }
+</script>

@@ -26,7 +26,7 @@
                     <a class="nav-link" asp-action="Index" asp-controller="Home"><span class="fas fa-user"></span> Oğuz ŞEN</a>
                 </li>
                 <li class="nav-item col">
-                    <a class="nav-link"  asp-action="Projeler" asp-controller="Home" ><span class="fas fa-project-diagram"></span> Projeler</a>
+                    <a class="nav-link" asp-action="Projeler" asp-controller="Home"><span class="fas fa-project-diagram"></span> Projeler</a>
                 </li>
                 <li class="nav-item col">
                     <a class="nav-link" asp-action="Blog" asp-controller="Home"><span class="fab fa-blogger-b"></span> Blog</a>
@@ -36,8 +36,8 @@
                 </li>
                 @if (signInManager.IsSignedIn(User))
                 {
-                    
-                    <li class="nav-item col" >
+
+                    <li class="nav-item col">
                         <a class="nav-link" asp-action="ÇıkışYap" asp-controller="Hesaplar"><span class="fas fa-sign-in-alt"></span> Çıkış @signInManager.UserManager.GetUserAsync(User).Result.kullanıcıAdı</a>
                     </li>
                 }
@@ -51,7 +51,9 @@
         </div>
     </nav>
 
-    <div class="modal fade" data-backdrop="static" id="ozModal">
+    <!-- #region Gerekli Modüller -->
+    @*<div class="modal fade" data-backdrop="static" id="ozModal">*@
+    <div class="modal fade" id="ozModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header modal-baslik bg-dark">
@@ -67,23 +69,23 @@
             </div>
         </div>
     </div>
-
     <div style="display:none">
         <div class="bekleyiniz">
-            <center>
-                <div class='dot-spin'></div>
-                <br />
-                Lütfen bekleyiniz
-            </center>
+            <div class='dot-spin'></div>
+            <br />
+            Lütfen bekleyiniz
         </div>
-        <div class="beklemeyiniz">
-            <center>
-                <span class="fas fa-exclamation-circle"></span>
-                <br />
-                Bir hata oldu
-            </center>
+        <div class="hataOldu">
+            <span class="fas fa-exclamation-circle"> Bir hata oldu</span>
+        </div>
+        <div id="ozConfirm" style="min-height:40em">
+            <div id="ozQuestion"></div>
+            <br />
+            <button class="btn " id="ozYesBtn">Yes</button>
+            <button class="btn " id="ozNoBtn">No</button>
         </div>
     </div>
+    <!-- #endregion -->
 
     <script>
         function aktifYap(navitem) {
