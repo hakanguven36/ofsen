@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using ofsen.Models;
+using ofsen.Araclar;
+using Newtonsoft.Json;
 
 namespace ofsen.Controllers
 {
@@ -42,9 +45,8 @@ namespace ofsen.Controllers
 		{
 			return View();
 		}
-
 		[HttpPost]
-		public IActionResult İletişim(Comment comment)
+		public async Task<IActionResult> İletişim(Comment comment)
 		{
 			try
 			{
@@ -52,8 +54,8 @@ namespace ofsen.Controllers
 				comment.okundu = false;
 				comment.tarih = DateTime.Now;
 				db.Comment.Add(comment);
-				db.SaveChanges();
-				return Json("Kaydedildi.");
+				await db.SaveChangesAsync();
+				return Json("Mesajınız alındı. Teşekkürler.");
 			}
 			catch
 			{

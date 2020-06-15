@@ -15,7 +15,9 @@ using Microsoft.Extensions.Hosting;
 using NETCore.MailKit.Extensions;
 using NETCore.MailKit.Infrastructure.Internal;
 using ofsen.Models;
-
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace ofsen
 {
@@ -38,15 +40,36 @@ namespace ofsen
 				option.Password.RequireUppercase = false;
 				option.Password.RequiredUniqueChars = 2;
 				option.Password.RequireNonAlphanumeric = false;
-			}).AddEntityFrameworkStores<OfsenContext>();
+			})
+				.AddEntityFrameworkStores<OfsenContext>()
+				.AddDefaultTokenProviders();
+				
 			services.AddDbContext<OfsenContext>(option => option.UseSqlServer(Configuration.GetConnectionString("MyConn")));
-			services.AddMvc(option => option.EnableEndpointRouting = false).AddRazorRuntimeCompilation();
+			services.AddMvc(option => option.EnableEndpointRouting = false)
+				.AddRazorRuntimeCompilation()
+				.AddJsonOptions(opt => opt.JsonSerializerOptions.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping);
+
 			services.AddSession(option => option.IdleTimeout = TimeSpan.FromMinutes(30));
 			services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();  // getip of cli
 			services.AddMailKit(config => config.UseMailKit(Configuration.GetSection("Eposta").Get<MailKitOptions>()));
+			services.AddAuthorization(config =>
+			{
+				var defaultAuthBuilder = new AuthorizationPolicyBuilder();
+				var defaultAuthPolicy = defaultAuthBuilder
+					.RequireAuthenticatedUser()
+					.Build();
+				config.DefaultPolicy = defaultAuthPolicy;
+
+				//var adminAuthPolicy = defaultAuthBuilder
+				//.RequireAuthenticatedUser()
+				//.RequireRole("admin")
+				//.Build();
+				//config.AddPolicy("admin", adminAuthPolicy);
+			});
+
 		}
 
-		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<AppUsers> userManager, RoleManager<AppRole> roleManager )
 		{
 			if (env.IsDevelopment())
 			{
@@ -56,8 +79,8 @@ namespace ofsen
 			{
 				app.UseExceptionHandler("/Home/Error");
 				app.UseHsts();
+				app.UseStatusCodePagesWithRedirects("/Home/StatusCodeErrors/{0}");
 			}
-			app.UseStatusCodePagesWithRedirects("/Home/StatusCodeErrors/{0}");
 
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
@@ -65,8 +88,8 @@ namespace ofsen
 
 			app.UseRouting();
 
-
 			app.UseAuthentication();
+			app.UseAuthorization();
 
 			app.UseMvc(routes =>
 			{
@@ -78,6 +101,8 @@ namespace ofsen
 					name: "default",
 					template: "{controller=Home}/{action=Index}/{id?}");
 			});
+
+			Kurulum.Kur(userManager, roleManager, Configuration);
 		}
 	}
 }

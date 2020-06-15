@@ -1,4 +1,4 @@
-﻿@model ofsen.ViewModels.HesaplarÜyeOlModel
+﻿@model ofsen.ViewModels.HesaplarUyelikModel
 
 @{
     ViewData["Title"] = "ÜyeOl";
@@ -11,24 +11,24 @@
         <form id="ÜyeOl" asp-action="ÜyeOl" autocomplete="off">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="username" class="control-label"></label>
-                <input asp-for="username" class="form-control" />
-                <span asp-validation-for="username" class="text-danger"></span>
+                <label asp-for="eposta" class="control-label"></label>
+                <input asp-for="eposta" class="form-control" />
+                <span asp-validation-for="eposta" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="email" class="control-label"></label>
-                <input asp-for="email" class="form-control" />
-                <span asp-validation-for="email" class="text-danger"></span>
+                <label asp-for="sifre" class="control-label"></label>
+                <input asp-for="sifre" class="form-control" />
+                <span asp-validation-for="sifre" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="password" class="control-label"></label>
-                <input asp-for="password" class="form-control" />
-                <span asp-validation-for="password" class="text-danger"></span>
+                <label asp-for="sifreTekrar" class="control-label"></label>
+                <input asp-for="sifreTekrar" class="form-control" />
+                <span asp-validation-for="sifreTekrar" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="confirmpassword" class="control-label"></label>
-                <input asp-for="confirmpassword" class="form-control" />
-                <span asp-validation-for="confirmpassword" class="text-danger"></span>
+                <label asp-for="kullaniciAdi" class="control-label"></label>
+                <input asp-for="kullaniciAdi" class="form-control" />
+                <span asp-validation-for="kullaniciAdi" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Üye Ol" class="btn btn-outline-dark form-control" />
@@ -49,14 +49,14 @@
 
         $("#ÜyeOl").validate({
             rules: {
-                username: { required: true, minlength: 4, maxlength: 12 },
-                email: { required: true, email: true },
-                password: { required: true, minlength: 4, maxlength: 12 },
-                confirmpassword: { equalTo: "#password" },
+                kullaniciAdi: { required: true, minlength: 4, maxlength: 12 },
+                eposta: { required: true, email: true },
+                sifre: { required: true, minlength: 4, maxlength: 12 },
+                sifreTekrar: { equalTo: "#sifre" },
             },
             errorElement: "em",
             errorPlacement: function (error, element) {
-                // Add the `help-block` class to the error element
+
                 error.addClass("input-Validation-Block");
 
                 if (element.prop("type") === "checkbox") {

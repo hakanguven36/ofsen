@@ -8,6 +8,8 @@ namespace ofsen.ViewModels
 	public class FreeTokenModel
 	{
 		public string userID { get; set; }
+		public string email { get; set; }
+		public string emailDomain { get; set; }
 		public string code { get; set; }
 		public string confirmationLink { get; set; }
 	}

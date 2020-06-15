@@ -9,11 +9,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ofsen.Models;
 using ofsen.Araclar;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ofsen.Controllers
 {
 	[Area("Admin")]
-	//[Yetki(Role.admin)]
+	[Authorize(Roles = "admin")]
     public class PanolarController : Controller
     {
         private readonly OfsenContext db;
@@ -23,7 +24,7 @@ namespace ofsen.Controllers
 		public PanolarController(OfsenContext db, IWebHostEnvironment hostEnvironment)
         {
             this.db = db;
-			this.hostEnvironment = hostEnvironment;
+			this.hostEnvironment = hostEnvironment;  
 			uploadsRoot = hostEnvironment.WebRootPath + "/uploads";
 		}
 

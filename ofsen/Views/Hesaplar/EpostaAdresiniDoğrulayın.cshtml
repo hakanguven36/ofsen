@@ -1,0 +1,14 @@
+﻿@model ofsen.ViewModels.FreeTokenModel
+@{
+    ViewData["Title"] = "Eposta Adresini Doğrulayın";
+}
+    <div id="buSayfaDiv">
+        <p>Sitemize üye olurken belirttiğiniz e-posta adresinizi (@Model.email) onaylamanız gerekiyor.</p>
+        <p><a href="@Model.emailDomain" target="_blank"><i>@Model.emailDomain</i></a></p>
+        <p>Lütfen gereksiz e-postalar (spam) bölümünü de kontrol ediniz.</p>
+        <p>Eğer üyelik işleminizi henüz yaptıysanız doğrulama e-postasının ulaşması biraz zaman alabilir.</p>
+    </div>
+
+
+
+

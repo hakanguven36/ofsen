@@ -9,8 +9,9 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="~/js/site.js"></script>
+    <script src="~/lib/jquery.autosize.min.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="~/js/site.js"></script>
 
 </head>
 <body>
@@ -35,8 +36,9 @@
                 </li>
                 @if (signInManager.IsSignedIn(User))
                 {
+                    
                     <li class="nav-item col" >
-                        <a class="nav-link" asp-action="ÇıkışYap" asp-controller="Hesaplar"><span class="fas fa-sign-in-alt"></span> Çıkış @signInManager.UserManager.GetUserName(User)</a>
+                        <a class="nav-link" asp-action="ÇıkışYap" asp-controller="Hesaplar"><span class="fas fa-sign-in-alt"></span> Çıkış @signInManager.UserManager.GetUserAsync(User).Result.kullanıcıAdı</a>
                     </li>
                 }
                 else
@@ -49,18 +51,18 @@
         </div>
     </nav>
 
-    <div class="modal fade" data-backdrop="static" id="xModal">
+    <div class="modal fade" data-backdrop="static" id="ozModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header modal-baslik bg-dark">
-                    <div class="row-cols-1"></div>
+                    <div id="ozModalBaslik" class="row-cols-1; m-auto"></div>
                     <div class="row-cols-1 float-right">
                         <button type="button" class="closeBtn" data-dismiss="modal" aria-label="Close">
                             X
                         </button>
                     </div>
                 </div>
-                <div class="modal-body" id="xIcerik">
+                <div class="modal-body" id="ozIcerik">
                 </div>
             </div>
         </div>

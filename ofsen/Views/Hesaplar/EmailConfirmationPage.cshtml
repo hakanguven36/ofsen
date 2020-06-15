@@ -1,11 +1,8 @@
 ﻿@model ofsen.ViewModels.FreeTokenModel
-
 @{
     Layout = null;
 }
-
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -14,13 +11,13 @@
 </head>
 <body>
 
-    <div style="color:darkblue; font-family:'Comic Sans MS'">
+    <div style="color:darkblue; font-family:'Comic Sans MS'; border:solid 2px grey; border-radius:1em; padding:2em">
         <h4>Merhaba</h4><br />
         <h5>Bu e-posta adresi ile <a href="http://www.oguzsen.net" target="_blank">http://www.oguzsen.net</a> sitesine üyelik yaptınız.</h5>
         <h5>Üye olduğunuz için teşekkürler.</h5>
         <h5>Üyelik işlemlerinizin tamamlanması için lütfen aşağıdaki doğrula düğmesine tıklayarak e-posta adresinizi doğrulayın.</h5>
         <br />
-        <button class="btn btn-success" onclick="dogrula()"> Doğrula </button>
+        <button class="btn btn-lg btn-success" onclick="dogrula()"> E-posta Adresimi Doğrula </button>
         <br />
         <h5>Veya aşağıdaki kodu internet tarayıcınızın adres bölümüne yapıştırıp enter'layınız.</h5>
         <br />

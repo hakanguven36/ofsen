@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using NETCore.MailKit.Core;
 using ofsen.Araclar;
 using ofsen.Models;
@@ -14,146 +13,163 @@ namespace ofsen.Controllers
 {
     public class HesaplarController : Controller
     {
-		private UserManager<AppUsers> userManager { get; }
+		#region ctor
+		private UserManager<AppUsers> userManager {get;}
 		private SignInManager<AppUsers> signInManager { get; }
 		private IEmailService emailService { get; }
-
 		public HesaplarController(UserManager<AppUsers> userManager, SignInManager<AppUsers> signInManager, IEmailService emailService)
 		{
 			this.userManager = userManager;
 			this.signInManager = signInManager;
 			this.emailService = emailService;
 		}
-
-        public IActionResult Index()
-        {
-            return RedirectToAction("GirişYap","Hesaplar");
-        }
-
-		#region Üyelik ve Eposta doğrulama
-		[HttpGet]
-		public IActionResult ÜyeOl() => View();
-		[HttpPost]
-		public async Task<IActionResult> ÜyeOl(HesaplarÜyeOlModel model)
-		{
-			if (ModelState.IsValid)
-			{
-				var user = new AppUsers()
-				{
-					UserName = model.email,
-					Email = model.email,
-					kullanıcıAdı = model.username,
-					uyelikTarihi = DateTime.Now
-				};
-
-				var result = await userManager.CreateAsync(user, model.password);
-
-				if (result.Succeeded)
-				{
-					return RedirectToAction("EpostaAdresiniDoğrulayın", "Hesaplar", new {user});
-				}
-				foreach (var error in result.Errors)
-				{
-					ModelState.AddModelError("", error.Description);
-				}
-				
-			}
-			return View(model);
-		}
-
-		[HttpGet]
-		public IActionResult EpostaAdresiniDoğrulayın() => View();
-		[HttpPost]
-		public IActionResult EpostaAdresiniDoğrulayın(AppUsers user)
-		{
-			Task.Run(() => SendConfirmationEmail(user));
-			return View();
-		}
-
-		public async Task< bool> SendConfirmationEmail(AppUsers user)
-		{
-			try
-			{
-				// token yarat
-				// sayfayı string olarak hazırla
-
-				var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-				var link = Url.Action(nameof(EpostaDogrula), "Hesaplar", new { userID = user.Id, code = token });
-				FreeTokenModel tokenModel = new FreeTokenModel() { confirmationLink = link };
-				string sayfa = this.RenderViewAsync("EmailConfirmationPage", tokenModel).Result;
-				await emailService.SendAsync(user.Email, "E-posta adresini doğrulayın", sayfa, true);
-				return true;
-			}
-			catch
-			{
-				return false;
-			}
-		}
-
-		public IActionResult EmailConfirmationPage(FreeTokenModel model)
-		{
-			return View(model);
-		}
-
 		#endregion
 
-		#region Giriş ve şifremi unuttum.. Ayrıca doğrumayı yeniden gönder
+		public IActionResult Index() => RedirectToAction("GirişYap", "Hesaplar");
+		
 		[HttpGet]
-		public IActionResult GirişYap() => View();
+		public IActionResult GirişYap()
+		{
+			if (signInManager.IsSignedIn(User))
+				return RedirectToAction("Index", "Home");
+			return View();
+		}
 		[HttpPost]
-		public async Task<IActionResult> GirişYap(HesaplarGirişYapModel model)
+		public async Task<IActionResult> GirişYap(HesaplarGirisModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				// TODO: kullanıcı ip sini kontrol et.. üst üste 5 kez hata olduysa ipyi blokla gitsin...
-				var findUser = userManager.FindByNameAsync(model.username);
-				if(findUser.Result == null)
+				var findUser = userManager.FindByNameAsync(model.eposta);
+				if (findUser.Result == null)
 				{
 					ModelState.AddModelError("", "Hatalı giriş teşebbüsü");
 					return View(model);
 				}
 				if (findUser.Result.silindi)
 				{
-					ModelState.AddModelError("", "Bu kullanıcı silindi!");
+					ModelState.AddModelError("", "Kullanıcı silindi!");
+					return View(model);
+				}
+				var isLockedOut = await userManager.IsLockedOutAsync(findUser.Result);
+				if(isLockedOut)
+				{
+					ModelState.AddModelError("", "Maksimum sayıda hatalı giriş yaptınız! Hesabınız 5 dakikalığına bloklandı.");
 					return View(model);
 				}
 				if (!findUser.Result.EmailConfirmed)
 				{
-					ModelState.AddModelError("", "EmailConfirmationNeeded"); //EmailConfirmationNeeded söz öbeği js tarafında kullanılıyor!
-					return View(model);
+					return RedirectToAction("EpostaAdresiniDoğrulayın", "Hesaplar", new { email = model.eposta});
 				}
 
-				var signInResult = await signInManager.PasswordSignInAsync(model.username, model.password, model.hatırla, false);
+				var signInResult = await signInManager.PasswordSignInAsync(model.eposta, model.sifre, model.hatirla, false);
+
 				if (signInResult.Succeeded)
 				{
+					
+					await userManager.ResetAccessFailedCountAsync(findUser.Result);
 					return RedirectToAction("Index", "Home");
 				}
 				else
 				{
-					findUser.Result.AccessFailedCount++;
+					await userManager.AccessFailedAsync(findUser.Result);
+					ModelState.AddModelError("", "Hatalı giriş teşebbüsü");
 				}
-				ModelState.AddModelError("", "Hatalı giriş teşebbüsü");
-
 			}
 			return View(model);
 		}
-		#endregion
 
-
-		public IActionResult EpostanızıDoğrulayın(string thatusername)
+		[HttpGet]
+		public IActionResult ÜyeOl() => View();
+		[HttpPost]
+		public async Task<IActionResult> ÜyeOl(HesaplarUyelikModel model)
 		{
-			ViewBag.epostaniz = thatusername;
-			ViewBag.epostaSaglayici = "http://www." + thatusername.Substring(thatusername.IndexOf('@') + 1);
-			return View();
+			if (ModelState.IsValid)
+			{
+				var user = new AppUsers()
+				{
+					UserName = model.eposta,
+					Email = model.eposta,
+					kullanıcıAdı = model.kullaniciAdi,
+					uyelikTarihi = DateTime.Now
+				};
+
+				var result = await userManager.CreateAsync(user, model.sifre);
+
+				if (result.Succeeded)
+				{
+					await userManager.AddToRoleAsync(user, "user");
+					var confirmationEmailSent = await SendConfirmationEmail(user);
+					if (confirmationEmailSent)
+					{
+						return RedirectToAction("EpostaAdresiniDoğrulayın", "Hesaplar", new { email = model.eposta });
+					}
+					else
+						ModelState.AddModelError("", "Eposta gönderme hatası!");
+				}
+				foreach (var error in result.Errors)
+				{
+					ModelState.AddModelError("", error.Description);
+				}
+			}
+			return View(model);
 		}
 
-		public	IActionResult EpostaDogrula(string userID, string code)
+		private async Task<bool> SendConfirmationEmail(AppUsers user)
 		{
-			// TODO : doğrula...
-			ViewBag.message = "Tebrikler...";
-			return View();
-
+			try
+			{
+				var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+				var link = Url.Action(nameof(EpostaDogrula), "Hesaplar", new { userID = user.Id, code = code }, Request.Scheme, Request.Host.tooString());
+				FreeTokenModel tokenModel = new FreeTokenModel()
+				{ 
+					userID = user.Id.tooString(),
+					code = code,
+					confirmationLink = link
+				};
+				string sayfa = this.RenderViewAsync("EmailConfirmationPage", tokenModel).Result;
+				await emailService.SendAsync(user.Email, "E-posta adresini doğrulayın", sayfa, true);
+				return true;
+			}
+			catch(Exception e)
+			{
+				string mesaj = e.Message;
+				return false;
+			}
+		}
+		public IActionResult EmailConfirmationPage(FreeTokenModel tokenModel)
+		{
+			return View(tokenModel);
 		}
 
-    }
+		public async Task<IActionResult> EpostaDogrula(string userID, string code)
+		{
+			var user = await userManager.FindByIdAsync(userID);
+			if (user != null)
+			{
+				var confirmation = await userManager.ConfirmEmailAsync(user, code);
+				if (confirmation.Succeeded)
+				{
+					await signInManager.SignInAsync(user, false);
+					return View();
+				}
+			}
+			return BadRequest();
+		}
+		public async Task<IActionResult> ÇıkışYap()
+		{
+			await signInManager.SignOutAsync();
+			return RedirectToAction("Index", "Home");
+		}
+		public async Task<IActionResult> EpostaAdresiniDoğrulayın(string email)
+		{
+			var user = await userManager.FindByEmailAsync(email);
+			if (signInManager.IsSignedIn(User) || user.EmailConfirmed)
+				return RedirectToAction("Index", "Home");
+			FreeTokenModel model = new FreeTokenModel();
+			model.email = email;
+			model.emailDomain = "http://www." + model.email.Substring(email.IndexOf('@') + 1);
+			return View(model);
+		}
+
+	}
 }

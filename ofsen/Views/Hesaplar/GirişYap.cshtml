@@ -1,39 +1,39 @@
-﻿@model ofsen.ViewModels.HesaplarGirişYapModel
-
+﻿@model ofsen.ViewModels.HesaplarGirisModel
 @{
-    ViewData["Title"] = "GirişYap";
+    ViewData["Title"] = "Giriş Yap";
 }
+
 <h5>Hesabınızda oturum açın</h5>
 <hr />
-    <div class="row">
-        <div class="col-md-4 offset-md-4" style="border:solid rgb(111,111,111) 2px; border-radius:5px; padding:1em ">
-            <form asp-action="GirişYap" autocomplete="off">
-                <div id="validationsum" asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="username" class="control-label"></label>
-                    <input asp-for="username" class="form-control" />
-                    <span asp-validation-for="username" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="password" class="control-label"></label>
-                    <input asp-for="password" class="form-control" />
-                    <span asp-validation-for="password" class="text-danger"></span>
-                </div>
+<div class="row">
+    <div class="col-md-4 offset-md-4" style="border:solid rgb(111,111,111) 2px; border-radius:5px; padding:1em ">
+        <form asp-action="GirişYap" autocomplete="off">
+            <div id="validationsum" asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="eposta" class="control-label"></label>
+                <input asp-for="eposta" class="form-control" />
+                <span asp-validation-for="eposta" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="sifre" class="control-label"></label>
+                <input asp-for="sifre" class="form-control" />
+                <span asp-validation-for="sifre" class="text-danger"></span>
+            </div>
 
-                <div class="form-check-inline">
-                    <label class="form-check-label">
-                        @Html.DisplayNameFor(model => model.hatırla) <input class="form-check-input" asp-for="hatırla" />
-                    </label>
-                </div>
-                <br /><br />
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    @Html.DisplayNameFor(model => model.hatirla) <input class="form-check-input" asp-for="hatirla" />
+                </label>
+            </div>
+            <br /><br />
 
-                <div class="form-group">
-                    <input type="submit" value="Giriş" class="btn form-control btn-outline-dark" />
-                    <a class="text-dark" asp-action="ŞifremiUnuttum" asp-controller="Hesaplar"><i>Şifremi unuttum</i></a>
-                </div>
-            </form>
-        </div>
+            <div class="form-group">
+                <input type="submit" value="Giriş" class="btn form-control btn-outline-dark" />
+                <a class="text-dark" asp-action="ŞifremiUnuttum" asp-controller="Hesaplar"><i>Şifremi unuttum</i></a>
+            </div>
+        </form>
     </div>
+</div>
 <br />
 <div class="row">
     <div class="col-md-4 offset-md-4" style="border:solid rgb(111,111,111) 2px; border-radius:5px; padding:1em ">
@@ -43,18 +43,15 @@
 </div>
 
 <script>
-    $(document).ready(function () { 
+    $(document).ready(function () {
         if ($("#validationsum").html().search("EmailConfirmationNeeded") >= 0) {
-
             $("#validationsum").html($(".bekleyiniz").html());
-
-            new OzAjax("/Hesaplar/EpostaOnayGerekli", GET, { thatusername: $("#username").val() }, epostaDogrulaBasari).BasitGonder();
+            new OzAjax("/Hesaplar/EpostaAdresiniDoğrulayın", GET, { eposta: $("#eposta").val() }, epostaDogrulaBasari).BasitGonder();
             function epostaDogrulaBasari(data) {
                 $("#validationsum").html(data);
             }
         }
     });
-
-        
-    
 </script>
+
+

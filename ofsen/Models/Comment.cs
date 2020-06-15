@@ -14,10 +14,13 @@ namespace ofsen.Models
 
 		[Required]
 		[StringLength(60)]
+		[Display(Name = "E-posta Adresiniz")]
+		[DataType(DataType.EmailAddress)]
 		public string eposta { get; set; }
 
 		[Required]
 		[StringLength(maximumLength: 600, MinimumLength = 6, ErrorMessage ="Bu alan 6-600 karakter olmalı.")]
+		[Display(Name = "Mesajınız")]
 		public string mesaj { get; set; }
 
 		[StringLength(20)]

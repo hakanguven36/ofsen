@@ -7,38 +7,31 @@ using ofsen.Araclar;
 
 namespace ofsen.ViewModels
 {
-	public class HesaplarÜyeOlModel
+	public class HesaplarUyelikModel
 	{
 		[Required(ErrorMessage = "Bu alan gerekli")]
 		[Display(Name ="Kullanıcı Adı")]
 		[StringLength(12,MinimumLength =4 , ErrorMessage ="Kullanıcı adı 4-12 karakter uzunluğunda olmalı")]
-		[UserName]
-		public string username { get; set; }
+		public string kullaniciAdi { get; set; }
 
 		[Required(ErrorMessage = "Bu alan gerekli")]
 		[Display(Name = "E-posta")]
 		[DataType(DataType.EmailAddress)]
-		public string email { get; set; }
+		public string eposta { get; set; }
+
+		[ScaffoldColumn(true)]
+		public string epostaDomain { get; set; }
 
 		[Required(ErrorMessage = "Bu alan gerekli")]
 		[Display(Name = "Şifre")]
 		[DataType(DataType.Password)]
 		[StringLength(12, MinimumLength = 4, ErrorMessage = "Şifre 4-12 karakter uzunluğunda olmalı")]
-		public string password { get; set; }
+		public string sifre { get; set; }
+
 
 		[Display(Name = "Şifre(Tekrar)")]
 		[DataType(DataType.Password)]
-		[Compare("password", ErrorMessage = "Girdiğiniz şifreler uyuşmuyor")]
-		public string confirmpassword{ get; set; }
-	}
-
-	public class UserNameAttribute : ValidationAttribute
-	{
-		protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-		{
-			if (value.tooString().Contains('@'))
-				return new ValidationResult("Kullanıcı adı '@' içeremez.");
-			return ValidationResult.Success;
-		}
+		[Compare("sifre", ErrorMessage = "Girdiğiniz şifreler uyuşmuyor")]
+		public string sifreTekrar{ get; set; }
 	}
 }

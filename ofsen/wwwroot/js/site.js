@@ -20,7 +20,6 @@ OzAjax.prototype.BasitGonder = function () {
         method: this.method,
         data: this.sendData,
         dataType: "text",
-        global:false,
         success: this.cllBckFnSuccess,
         error: this.cllBckFnError || this.Error
     });
@@ -34,7 +33,6 @@ OzAjax.prototype.MultiGonder = function () {
         method: "POST",
         data: this.sendData,
         dataType: "text", 
-        global: false,
         enctype: "multipart/form-data",
         timeout: 180000,
         contentType: false,
@@ -73,10 +71,13 @@ $().addClass("");
 function OzModal() {
     this.ozmodal = $("#ozModal");
     this.ozicerik = $("#ozIcerik");
+    this.ozBaslik = $("#ozModalBaslik");
     this.bilgiUsed = 0;
 }
-OzModal.prototype.Bilgi = function (bilgi, sure) {
+OzModal.prototype.Bilgi = function (bilgi, sure, baslik) {
+
     this.ozicerik.html(bilgi);
+    this.ozBaslik.html(baslik || "Bilgi");
     this.ozmodal.modal("show");
     setTimeout(this.Kapat, sure || 1200);
     this.bilgiUsed++;
