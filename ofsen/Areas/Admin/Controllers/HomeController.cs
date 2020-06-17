@@ -8,6 +8,8 @@ using ofsen.Models;
 
 namespace ofsen.Areas.Admin.Controllers
 {
+
+	// değişiklik github...
 	[Area("Admin")]
 	//[Yetki(Role.admin)]
 	public class HomeController : Controller
